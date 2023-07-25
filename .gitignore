@@ -1,0 +1,34 @@
+### Code ###
+.vscode/*
+
+### Node ###
+# Logs
+logs
+*.log*
+.yarn/
+.yarnrc
+
+# Dependency directories
+node_modules/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+.env.build
+
+# Temporary folders
+tmp/
+temp/
+
+# Apple shit
+.DS_Store
+package-lock.json
+
+# Build
+temp
+build
