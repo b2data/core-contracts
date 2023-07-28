@@ -5,30 +5,26 @@ const op::create = "op::create"c;   ;; 0x15cf00af
 const op::remove = "op::remove"c;   ;; 0xf299fd64
 const op::change = "op::change"c;   ;; 0xda4e1e74
 const op::rename = "op::rename"c;   ;; 0x4384b41a
-const op::invite = "op::invite"c;   ;; 0x5dfbf083
-const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
 
 
 ;; contract_dict = { accountId, contract_address }
 ;; owner_dict     = { accountId, owner_address }
 ;; site_dict      = { accountId, ANDL } 
-;; user_dict     = { telegramID, [organizations_accountId] }
-(cell, cell, cell, cell) load_data() impure {
+(cell, cell, cell) load_data() impure {
   slice ds = get_data().begin_parse();
   if (ds.slice_bits() < 2) {
-    return (new_dict(), new_dict(), new_dict(), new_dict());
+    return (new_dict(), new_dict(), new_dict());
   } else {
-    return (ds~load_dict(), ds~load_dict(), ds~load_dict(), ds~load_dict());
+    return (ds~load_dict(), ds~load_dict(), ds~load_dict());
   }
 }
 
-() save_data(cell contract_dict, cell owners_dict, cell site_dict, cell user_dict) impure {
+() save_data(cell contract_dict, cell owners_dict, cell site_dict) impure {
   set_data(
     begin_cell()
       .store_dict(contract_dict)
       .store_dict(owners_dict)
       .store_dict(site_dict)
-      .store_dict(user_dict)
       .end_cell()
   );
 }
@@ -44,7 +40,7 @@ const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
     return ();
   }
 
-  (cell contract_dict, cell owners_dict, cell site_dict, cell user_dict) = load_data();
+  (cell contract_dict, cell owners_dict, cell site_dict) = load_data();
 
   slice sender_address = cs~load_msg_addr();
   int op = in_msg_body~load_uint(32);
@@ -64,7 +60,7 @@ const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
     owners_dict~udict_set(256, contract, sender_address);
     site_dict~udict_set(256, contract, site);
 
-    save_data(contract_dict, owners_dict, site_dict, user_dict);
+    save_data(contract_dict, owners_dict, site_dict);
     return ();
   }
 
@@ -76,9 +72,7 @@ const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
     owners_dict~udict_delete?(256, contract);
     site_dict~udict_delete?(256, contract);
 
-    ;; TODO: ?? remove org from all users
-
-    save_data(contract_dict, owners_dict, site_dict, user_dict);
+    save_data(contract_dict, owners_dict, site_dict);
     return ();
   }
 
@@ -89,7 +83,7 @@ const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
     slice new_owner_address = in_msg_body~load_ref().begin_parse();
     owners_dict~udict_set(256, contract, new_owner_address);
 
-    save_data(contract_dict, owners_dict, site_dict, user_dict);
+    save_data(contract_dict, owners_dict, site_dict);
     return ();
   }
 
@@ -101,7 +95,7 @@ const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
 
     site_dict~udict_set(256, contract, site);
 
-    save_data(contract_dict, owners_dict, site_dict, user_dict);
+    save_data(contract_dict, owners_dict, site_dict);
     return ();
   }
 
@@ -109,7 +103,7 @@ const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
 }
 
 int get_total() method_id {
-  (cell contract_dict, _, _, _) = load_data();
+  (cell contract_dict, _, _) = load_data();
   int total = 0;
   int key = -1;
 
@@ -124,13 +118,13 @@ int get_total() method_id {
 }
 
 slice get_contract_address(int key) method_id {
-  (cell contract_dict, _, _, _) = load_data();
+  (cell contract_dict, _, _) = load_data();
   (slice contract_address, int success) = contract_dict.udict_get?(256, key);
   return contract_address;
 }
 
 slice get_owner(int key) method_id {
-  (_, cell owners_dict, _, _) = load_data();
+  (_, cell owners_dict, _) = load_data();
   (slice owner_address, int success) = owners_dict.udict_get?(256, key);
   return owner_address;
 }
@@ -139,13 +133,13 @@ slice get_contract_owner(cell in_msg) method_id {
   slice contract_address = in_msg.begin_parse();
   int contract = address::get_hashpart(contract_address);
 
-  (_, cell owners_dict, _, _) = load_data();
+  (_, cell owners_dict, _) = load_data();
   (slice owner_address, int success) = owners_dict.udict_get?(256, contract);
   return owner_address;
 }
 
 slice get_site(int key) method_id {
-  (_, _, cell site_dict, _) = load_data();
+  (_, _, cell site_dict) = load_data();
   (slice site, int success) = site_dict.udict_get?(256, key);
   return site;
 }
@@ -154,22 +148,7 @@ slice get_contract_site(cell in_msg) method_id {
   slice contract_address = in_msg.begin_parse();
   int contract = address::get_hashpart(contract_address);
 
-  (_, _, cell site_dict, _) = load_data();
+  (_, _, cell site_dict) = load_data();
   (slice site, int success) = site_dict.udict_get?(256, contract);
   return site;
-}
-
-slice get_user_organizations(int key) method_id {
-  (_, _, _, cell user_dict) = load_data();
-  (slice list, int success) = user_dict.udict_get?(256, key);
-{-
-  do {
-    (key, slice cs, int f) = list.udict_get_next?(256, key);
-    if (f) {
-      result~tpush(cs);
-      size += 1;
-    }
-  } until (size < 254);
--}
-  return list;
 }

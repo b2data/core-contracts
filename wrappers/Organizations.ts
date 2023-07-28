@@ -8,8 +8,6 @@ export const Opcodes = {
   remove: 0xf299fd64,
   change: 0xda4e1e74,
   rename: 0x4384b41a,
-  invite: 0x5dfbf083,
-  exclude: 0x0e1e6b74,
 };
 
 export function organizationsConfigToCell(config: OrganizationsConfig): Cell {
@@ -139,20 +137,4 @@ export class Organizations implements Contract {
     const result = await provider.get('get_contract_site', [{ type: 'cell', cell: beginCell().storeAddress(address).endCell() }]);
     return result.stack.readBufferOpt()?.toString() || null;
   }
-
-  // async getContracts(provider: ContractProvider) {
-  //   const result = await provider.get('get_contacts', []);
-  //   const tuple = await result.stack.readTuple();
-  //   const list = [];
-
-  //   while (true) {
-  //     try {
-  //       const address = await tuple.readAddress();
-  //       list.push(address);
-  //     } catch (err) {
-  //       break;
-  //     }
-  //   }
-  //   return list;
-  // }
 }

@@ -53,7 +53,7 @@ describe('Organizations', () => {
   it('Should add new organization', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
-    const site = 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy';
+    const site = 'http://adnl-address.ton';
 
     const client = await blockchain.treasury('client');
 
@@ -88,7 +88,7 @@ describe('Organizations', () => {
     await organizations.sendCreate(client.getSender(), {
       gas: toNano('0.1'),
       account: accounts[0],
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy',
+      site: 'http://adnl-address.ton',
     });
 
     const total = await organizations.getTotal();
@@ -97,7 +97,7 @@ describe('Organizations', () => {
     const result = await organizations.sendCreate(client.getSender(), {
       gas: toNano('0.1'),
       account: accounts[0],
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy',
+      site: 'http://adnl-address.ton',
     });
 
     expect(result.transactions).toHaveTransaction({
@@ -111,7 +111,7 @@ describe('Organizations', () => {
   it('Should remove existing organization', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
-    const site = 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy';
+    const site = 'http://adnl-address.ton';
 
     const client = await blockchain.treasury('client');
 
@@ -154,7 +154,7 @@ describe('Organizations', () => {
     await organizations.sendCreate(client.getSender(), {
       gas: toNano('0.1'),
       account: accounts[0],
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy',
+      site: 'http://adnl-address.ton',
     });
     
     const totalAfterCreation = await organizations.getTotal();
@@ -183,7 +183,7 @@ describe('Organizations', () => {
     await organizations.sendCreate(client.getSender(), {
       gas: toNano('0.1'),
       account: accounts[0],
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy',
+      site: 'http://adnl-address.ton',
     });
     
     const totalAfterCreation = await organizations.getTotal();
@@ -215,7 +215,7 @@ describe('Organizations', () => {
     await organizations.sendCreate(client.getSender(), {
       gas: toNano('0.1'),
       account,
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy',
+      site: 'http://adnl-address.ton',
     });
 
     const total = await organizations.getTotal();
@@ -247,7 +247,7 @@ describe('Organizations', () => {
     await organizations.sendCreate(client.getSender(), {
       gas: toNano('0.1'),
       account: accounts[0],
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy',
+      site: 'http://adnl-address.ton',
     });
     
     const totalAfterCreation = await organizations.getTotal();
@@ -273,7 +273,7 @@ describe('Organizations', () => {
   it('Should failed on changing owner from organization that does not belong current owner', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
-    const site = 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy';
+    const site = 'http://adnl-address.ton';
 
     const client = await blockchain.treasury('client');
     const client2 = await blockchain.treasury('client2');
@@ -310,14 +310,14 @@ describe('Organizations', () => {
   it('Should change organization site', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
-    const newSite = 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdk-new';
+    const newSite = 'http://adnl-address-new.ton';
 
     const client = await blockchain.treasury('client');
 
     await organizations.sendCreate(client.getSender(), {
       gas: toNano('0.1'),
       account,
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy',
+      site: 'http://adnl-address.ton',
     });
 
     const total = await organizations.getTotal();
@@ -345,7 +345,7 @@ describe('Organizations', () => {
   it('Should failed on changing organization site that does not exist', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
-    const site = 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy';
+    const site = 'http://adnl-address.ton';
 
     const client = await blockchain.treasury('client');
 
@@ -381,7 +381,7 @@ describe('Organizations', () => {
   it('Should failed on changing site from organization that does not belong current owner', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
-    const site = 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy';
+    const site = 'http://adnl-address.ton';
 
     const client = await blockchain.treasury('client');
     const client2 = await blockchain.treasury('client2');
@@ -432,7 +432,7 @@ describe('Organizations', () => {
 
   it('Should get owner/site by account address', async () => {
     const account = accounts[0];
-    const site = 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdkxauy';
+    const site = 'http://adnl-address.ton';
 
     const client = await blockchain.treasury('client');
 

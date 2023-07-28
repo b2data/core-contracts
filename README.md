@@ -1,12 +1,11 @@
 # Contracts
 
 ## Organizations Contract
-The smart-contract stores data in a cell of 4 dictionaries
+The smart-contract stores data in a cell of 3 dictionaries
 ```
 contract_dict   { account_id: ton_address   }
 owner_dict      { account_id: ton_address   }
 site_dict       { account_id: string        }
-user_dict       { telegram_id: [account_id] }
 ```
 
 All methods of the contracts are exported to `npm` and can be used from `@b2data/contracts`
@@ -15,14 +14,14 @@ All methods of the contracts are exported to `npm` and can be used from `@b2data
 
 #### Methods
 
-| Parameter | Type    | Desctiption                                                                             |
-| --------- | ------- | --------------------------------------------------------------------------------------- |
-| sender    | Sender  | Represents the connected wallet and allow to send transactions                          |
-| gas       | bigint  | Transaction fee                                                                         |
-| account   | Address | TON Address of wallet                                                                   |
-| site      | string  | ADNL address                                                                            |
-| newOwner  | Address | TON Address of new owner wallet                                                         |
-| accountId | bit256  | [Account ID](https://docs.ton.org/learn/overviews/addresses#account-id) of TON Address  |
+| Parameter   | Type    | Desctiption                                                                             |
+| ----------- | ------- | --------------------------------------------------------------------------------------- |
+| sender      | Sender  | Represents the connected wallet and allow to send transactions                          |
+| gas         | bigint  | Transaction fee                                                                         |
+| account     | Address | TON Address of organization wallet                                                      |
+| accountId   | bigint  | [Account ID](https://docs.ton.org/learn/overviews/addresses#account-id) of TON Address  |
+| site        | string  | ADNL address of orgnization server                                                      |
+| newOwner    | Address | TON Address of new organization wallet                                                  |
 
 - Create new organization
   ```
@@ -63,7 +62,7 @@ All methods of the contracts are exported to `npm` and can be used from `@b2data
 
 - Get TON address of organizations by accountId
   ```
-  getAddress(accountId: bigint) => Promise<Address>
+  getAddress(accountId: bigint) => Promise<Address | null>
   ```
 
 - Get owner of organization by accountId

@@ -1,6 +1,6 @@
 {
   "name": "@b2data/contracts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "Nikolai Turov",
   "main": "./index.ts",
