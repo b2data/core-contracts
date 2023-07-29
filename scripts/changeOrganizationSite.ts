@@ -27,10 +27,10 @@ export async function run(provider: NetworkProvider, args: string[]) {
   await organizations.sendChangeSite(provider.sender(), {
     gas: toNano('0.1'),
     account,
-    site: newSite
+    site: newSite,
   });
 
-  ui.write('Waiting for changing orgnization site...');
+  ui.write('Waiting for changing the orgnization site...');
 
   let siteAfter = await organizations.getSiteByAdrress(account);
   let attempt = 1;
@@ -44,5 +44,5 @@ export async function run(provider: NetworkProvider, args: string[]) {
   ui.write(`Site After: ${siteAfter}`);
 
   ui.clearActionPrompt();
-  ui.write('Organization site has been changed successfully!');
+  ui.write('The organization site has been successfully changed!');
 }

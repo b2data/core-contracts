@@ -22,10 +22,10 @@ export async function run(provider: NetworkProvider, args: string[]) {
   await organizations.sendChangeOwner(provider.sender(), {
     gas: toNano('0.1'),
     account,
-    newOwner: newOwnerAccount
+    newOwner: newOwnerAccount,
   });
 
-  ui.write('Waiting for changing orgnization owner...');
+  ui.write('Waiting for changing the orgnization owner...');
 
   let ownerAfter = await organizations.getOwnerByAdrress(account);
   let attempt = 1;
@@ -39,5 +39,5 @@ export async function run(provider: NetworkProvider, args: string[]) {
   ui.write(`Owner After: ${ownerAfter?.toString()}`);
 
   ui.clearActionPrompt();
-  ui.write('Organization owner has been changed successfully!');
+  ui.write('The organization owner has been successfully changed!');
 }

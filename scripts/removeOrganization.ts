@@ -23,7 +23,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     account,
   });
 
-  ui.write('Waiting for orgnization removal...');
+  ui.write('Waiting for the orgnization removal...');
 
   let organizationsAfter = await organizations.getTotal();
   let attempt = 1;
@@ -37,5 +37,5 @@ export async function run(provider: NetworkProvider, args: string[]) {
   ui.write(`Organizations After: ${organizationsAfter.toString()}`);
 
   ui.clearActionPrompt();
-  ui.write('Organization has been removed successfully!');
+  ui.write('The organization has been successfully removed!');
 }

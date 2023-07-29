@@ -22,10 +22,10 @@ export async function run(provider: NetworkProvider, args: string[]) {
   await organizations.sendCreate(provider.sender(), {
     gas: toNano('0.1'),
     account,
-    site
+    site,
   });
 
-  ui.write('Waiting for orgnization creation...');
+  ui.write('Waiting for the orgnization creation...');
 
   let organizationsAfter = await organizations.getTotal();
   let attempt = 1;
@@ -39,5 +39,5 @@ export async function run(provider: NetworkProvider, args: string[]) {
   ui.write(`Organizations After: ${organizationsAfter.toString()}`);
 
   ui.clearActionPrompt();
-  ui.write('Organization has been created successfully!');
+  ui.write('The organization has been successfully created!');
 }

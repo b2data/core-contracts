@@ -5,9 +5,9 @@ import '@ton-community/test-utils';
 import { compile } from '@ton-community/blueprint';
 
 const accounts = [
-  Address.parse("EQDyZBOXXjILiUTvx-5apgovq97k7aMrilhxvasBOlYCSKRf"),
-  Address.parse("EQA4liCwWOBQSq5CgmdFVkIl-73WB50eF672kdxadMdqimK9"),
-  Address.parse("kQAT8Od-84ZmbSrdtcLh_Vi2fi1U6UBAsPKGzncHsvUvCcXh"),
+  Address.parse('EQDyZBOXXjILiUTvx-5apgovq97k7aMrilhxvasBOlYCSKRf'),
+  Address.parse('EQA4liCwWOBQSq5CgmdFVkIl-73WB50eF672kdxadMdqimK9'),
+  Address.parse('kQAT8Od-84ZmbSrdtcLh_Vi2fi1U6UBAsPKGzncHsvUvCcXh'),
 ];
 
 const accountIds = [
@@ -29,9 +29,7 @@ describe('Organizations', () => {
   beforeEach(async () => {
     blockchain = await Blockchain.create();
 
-    organizations = blockchain.openContract(
-      Organizations.createFromConfig({}, code)
-    );
+    organizations = blockchain.openContract(Organizations.createFromConfig({}, code));
 
     const deployer = await blockchain.treasury('deployer');
 
@@ -45,7 +43,7 @@ describe('Organizations', () => {
     });
   });
 
-  it('should deploy', async () => {
+  it('Should deploy', async () => {
     // the check is done inside beforeEach
     // blockchain and organizations are ready to use
   });
@@ -68,7 +66,7 @@ describe('Organizations', () => {
       to: organizations.address,
       success: true,
     });
-  
+
     const total = await organizations.getTotal();
     expect(1).toEqual(total);
 
@@ -82,7 +80,7 @@ describe('Organizations', () => {
     expect(site).toEqual(siteResult);
   });
 
-  it('Should failed on creation organization that already exists', async () => {
+  it('Should be failed to create the organization that already exists', async () => {
     const client = await blockchain.treasury('client');
 
     await organizations.sendCreate(client.getSender(), {
@@ -120,7 +118,7 @@ describe('Organizations', () => {
       account,
       site,
     });
-    
+
     const totalAfterCreation = await organizations.getTotal();
     expect(1).toBe(totalAfterCreation);
 
@@ -148,7 +146,7 @@ describe('Organizations', () => {
     expect(null).toEqual(siteResult);
   });
 
-  it('Should failed on removal organization that does not exist', async () => {
+  it('Should be failed on removing the organization. The organization does not exist', async () => {
     const client = await blockchain.treasury('client');
 
     await organizations.sendCreate(client.getSender(), {
@@ -156,7 +154,7 @@ describe('Organizations', () => {
       account: accounts[0],
       site: 'http://adnl-address.ton',
     });
-    
+
     const totalAfterCreation = await organizations.getTotal();
     expect(1).toBe(totalAfterCreation);
 
@@ -176,7 +174,7 @@ describe('Organizations', () => {
     expect(1).toBe(total);
   });
 
-  it('Should failed on removal organization that does not belong current owner', async () => {
+  it('Should be failed on removing the organization that does not belong to the current owner', async () => {
     const client = await blockchain.treasury('client');
     const client2 = await blockchain.treasury('client2');
 
@@ -185,7 +183,7 @@ describe('Organizations', () => {
       account: accounts[0],
       site: 'http://adnl-address.ton',
     });
-    
+
     const totalAfterCreation = await organizations.getTotal();
     expect(1).toBe(totalAfterCreation);
 
@@ -205,7 +203,7 @@ describe('Organizations', () => {
     expect(1).toBe(total);
   });
 
-  it('Should change organization owner', async () => {
+  it('Should change the organization owner', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
 
@@ -240,7 +238,7 @@ describe('Organizations', () => {
     expect(client2.getSender().address.toString()).toEqual(owner?.toString());
   });
 
-  it('Should failed on changing organization owner that does not exist', async () => {
+  it('Should be failed on changing the organization owner. The organization does not exist', async () => {
     const client = await blockchain.treasury('client');
     const client2 = await blockchain.treasury('client2');
 
@@ -249,7 +247,7 @@ describe('Organizations', () => {
       account: accounts[0],
       site: 'http://adnl-address.ton',
     });
-    
+
     const totalAfterCreation = await organizations.getTotal();
     expect(1).toBe(totalAfterCreation);
 
@@ -270,7 +268,7 @@ describe('Organizations', () => {
     expect(1).toBe(total);
   });
 
-  it('Should failed on changing owner from organization that does not belong current owner', async () => {
+  it('Should be failed on changing an owner from the organization that does not belong to the current owner', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
     const site = 'http://adnl-address.ton';
@@ -307,7 +305,7 @@ describe('Organizations', () => {
     expect(client.getSender().address.toString()).toEqual(owner?.toString());
   });
 
-  it('Should change organization site', async () => {
+  it('Should change the organization site', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
     const newSite = 'http://adnl-address-new.ton';
@@ -326,7 +324,7 @@ describe('Organizations', () => {
     const result = await organizations.sendChangeSite(client.getSender(), {
       gas: toNano('0.1'),
       account,
-      site: newSite
+      site: newSite,
     });
 
     expect(result.transactions).toHaveTransaction({
@@ -342,7 +340,7 @@ describe('Organizations', () => {
     expect(newSite).toEqual(siteResult);
   });
 
-  it('Should failed on changing organization site that does not exist', async () => {
+  it('Should be failed on changing the organization site. The organization does not exist', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
     const site = 'http://adnl-address.ton';
@@ -361,7 +359,7 @@ describe('Organizations', () => {
     const result = await organizations.sendChangeSite(client.getSender(), {
       gas: toNano('0.1'),
       account: accounts[1],
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdk-new'
+      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdk-new',
     });
 
     expect(result.transactions).toHaveTransaction({
@@ -378,7 +376,7 @@ describe('Organizations', () => {
     expect(site).toEqual(siteResult);
   });
 
-  it('Should failed on changing site from organization that does not belong current owner', async () => {
+  it('Should be failed on changing the organization site from the organization that does not belong to the current owner', async () => {
     const account = accounts[0];
     const accountId = accountIds[0];
     const site = 'http://adnl-address.ton';
@@ -398,7 +396,7 @@ describe('Organizations', () => {
     const result = await organizations.sendChangeSite(client2.getSender(), {
       gas: toNano('0.1'),
       account,
-      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdk-new'
+      site: 'untzo7eat2h77xzfugxrfgfy3zbl5txomvetzke6fwr45lehvdk-new',
     });
 
     expect(result.transactions).toHaveTransaction({
@@ -415,22 +413,24 @@ describe('Organizations', () => {
     expect(site).toEqual(siteResult);
   });
 
-  it('Should get total number of organizations', async () => {
+  it('Should get the total number of organizations', async () => {
     const client = await blockchain.treasury('client');
 
-    await Promise.all(accounts.map(account => (
-      organizations.sendCreate(client.getSender(), {
-        gas: toNano('0.1'),
-        account,
-        site: 'test-sete'
-      })
-    )));
+    await Promise.all(
+      accounts.map((account) =>
+        organizations.sendCreate(client.getSender(), {
+          gas: toNano('0.1'),
+          account,
+          site: 'test-sete',
+        })
+      )
+    );
 
     const total = await organizations.getTotal();
     expect(accounts.length).toEqual(total);
   });
 
-  it('Should get owner/site by account address', async () => {
+  it('Should get the organization owner and site by the organization account address', async () => {
     const account = accounts[0];
     const site = 'http://adnl-address.ton';
 
@@ -447,7 +447,7 @@ describe('Organizations', () => {
       to: organizations.address,
       success: true,
     });
-  
+
     const total = await organizations.getTotal();
     expect(1).toEqual(total);
 

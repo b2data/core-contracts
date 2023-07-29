@@ -8,8 +8,8 @@ const op::rename = "op::rename"c;   ;; 0x4384b41a
 
 
 ;; contract_dict = { accountId, contract_address }
-;; owner_dict     = { accountId, owner_address }
-;; site_dict      = { accountId, ANDL } 
+;; owner_dict    = { accountId, owner_address }
+;; site_dict     = { accountId, ANDL } 
 (cell, cell, cell) load_data() impure {
   slice ds = get_data().begin_parse();
   if (ds.slice_bits() < 2) {
