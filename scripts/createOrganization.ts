@@ -1,6 +1,6 @@
-import { Address, toNano } from 'ton-core';
+import { Address, toNano } from '@ton/core';
 import { Organizations } from '../wrappers/Organizations';
-import { NetworkProvider, sleep } from '@ton-community/blueprint';
+import { NetworkProvider, sleep } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
   const ui = provider.ui();
@@ -25,7 +25,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     site,
   });
 
-  ui.write('Waiting for the orgnization creation...');
+  ui.write('Waiting for the organization creation...');
 
   let organizationsAfter = await organizations.getTotal();
   let attempt = 1;

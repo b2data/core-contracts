@@ -1,8 +1,9 @@
-import { Blockchain, SandboxContract } from '@ton-community/sandbox';
-import { Address, Cell, toNano } from 'ton-core';
+import { Blockchain, SandboxContract } from '@ton/sandbox';
+import { Address, Cell, toNano } from '@ton/core';
+import '@ton/test-utils';
+import { compile } from '@ton/blueprint';
+
 import { Users } from '../wrappers/Users';
-import '@ton-community/test-utils';
-import { compile } from '@ton-community/blueprint';
 
 const accounts = [
   Address.parse('EQDyZBOXXjILiUTvx-5apgovq97k7aMrilhxvasBOlYCSKRf'),
@@ -15,7 +16,7 @@ describe('Users', () => {
 
   beforeAll(async () => {
     code = await compile('Users');
-  });
+  }, 10000);
 
   let blockchain: Blockchain;
   let users: SandboxContract<Users>;

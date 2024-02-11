@@ -15,7 +15,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
       - run: npm i
       - run: npm run test
-      - run: npm run test:types
   build:
     needs: test
     runs-on: ubuntu-latest

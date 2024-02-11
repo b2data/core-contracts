@@ -1,6 +1,6 @@
-import { toNano } from 'ton-core';
+import { toNano } from '@ton/core';
 import { Users } from '../wrappers/Users';
-import { compile, NetworkProvider } from '@ton-community/blueprint';
+import { compile, NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
   const users = provider.open(Users.createFromConfig({}, await compile('Users')));

@@ -1,13 +1,13 @@
-import { Address, toNano } from 'ton-core';
+import { Address, toNano } from '@ton/core';
 import { Users } from '../wrappers/Users';
-import { NetworkProvider, sleep } from '@ton-community/blueprint';
+import { NetworkProvider, sleep } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
   const ui = provider.ui();
 
   const address = Address.parse(args.length > 0 ? args[0] : await ui.input('Contract address'));
   const account = Address.parse(args.length > 0 ? args[1] : await ui.input('Organization TON wallet'));
-  const wallet = Address.parse(args.length > 0 ? args[1] : await ui.input('User TON wallet'));
+  const wallet = Address.parse(args.length > 0 ? args[2] : await ui.input('User TON wallet'));
 
   if (!(await provider.isContractDeployed(address))) {
     ui.write(`Error: Contract at address ${address} is not deployed!`);

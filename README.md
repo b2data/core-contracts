@@ -1,6 +1,6 @@
 # Contracts
 
-| Smart contract  | Netwoork  | Address                                            | TonScan                                                                                      |
+| Smart contract  | Network  | Address                                            | TonScan                                                                                      |
 | --------------- | --------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | Organizations   | testnet   | `EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t` | [link](https://testnet.tonscan.org/address/EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t) |
 | Organizations   | mainnet   | `-` | [link](https://tonscan.org/address/) |
@@ -20,7 +20,7 @@ site_dict       { account_id: string        }
 
 #### Methods
 
-| Parameter   | Type    | Desctiption                                                                             |
+| Parameter   | Type    | Description                                                                             |
 | ----------- | ------- | --------------------------------------------------------------------------------------- |
 | sender      | Sender  | Represents the connected wallet and allows to send transactions                         |
 | gas         | bigint  | Transaction fee                                                                         |
@@ -112,7 +112,7 @@ site_dict       { account_id: string        }
 
 #### Methods
 
-| Parameter   | Type    | Desctiption                                                     |
+| Parameter   | Type    | Description                                                     |
 | ----------- | ------- | --------------------------------------------------------------- |
 | sender      | Sender  | Represents the connected wallet and allows to send transactions |
 | gas         | bigint  | Transaction fee                                                 |
