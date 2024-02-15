@@ -30,7 +30,7 @@ export enum JettonError {
   UnauthorizedIncomingTransfer = 707,
   MalformedForwardPayload = 708,
   NotEnoughTons = 709,
-  BurnFeeNotMatched = 707,
+  BurnFeeNotMatched = 710,
   UnknownAction = 0xffff,
   UnknownActionBounced = 0xfff0,
 
@@ -46,6 +46,7 @@ export type JettonMetaDataKeys = 'name' | 'description' | 'image' | 'decimals' |
 
 export type JettonMasterConfig = {
   owner: Address;
+  walletCell: Cell;
   metadata: { [s in JettonMetaDataKeys]?: string };
 };
 
@@ -71,7 +72,7 @@ export const buildTokenMetadataCell = (metadata: JettonMasterConfig['metadata'])
   Object.entries(metadata).forEach(([k, v]: [string, string | undefined]) => {
     if (!jettonOnChainMetadataSpec[k as JettonMetaDataKeys]) throw new Error(`Unsupported onchain key: ${k}`);
     if (v === undefined || v === '') return;
-    const bufferToStore = Buffer.from(v, jettonOnChainMetadataSpec[k as JettonMetaDataKeys]);
+    const bufferToStore = Buffer.from(`\x00${v}`, jettonOnChainMetadataSpec[k as JettonMetaDataKeys]);
     dict.set(sha256(k), beginCell().storeBuffer(bufferToStore).endCell());
   });
 
@@ -79,7 +80,14 @@ export const buildTokenMetadataCell = (metadata: JettonMasterConfig['metadata'])
 };
 
 export const transformContentCell = (content: Cell) => {
-  const metadata: Record<string, string> = {};
+  const metadata: Record<JettonMetaDataKeys, string> = {
+    name: '',
+    description: '',
+    image: '',
+    decimals: '',
+    symbol: '',
+  };
+
   const contentSlice = content.beginParse();
   const unix = contentSlice.loadUint(8);
 
@@ -88,9 +96,10 @@ export const transformContentCell = (content: Cell) => {
     Object.keys(jettonOnChainMetadataSpec).map((k) => {
       const val = dict.get(sha256(k))?.beginParse();
       if (val) {
-        metadata[k] = val
+        metadata[k as JettonMetaDataKeys] = val
           .loadBuffer(Math.ceil(val.remainingBits / 8))
-          .toString(jettonOnChainMetadataSpec[k as JettonMetaDataKeys]);
+          .toString(jettonOnChainMetadataSpec[k as JettonMetaDataKeys])
+          .replace('\x00', '');
       }
     });
   }

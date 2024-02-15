@@ -9,13 +9,7 @@ import {
   SendMode,
   toNano,
 } from '@ton/core';
-import { buildTokenMetadataCell, JettonMetaDataKeys, JettonOp, transformContentCell } from './utils-jetton';
-
-export type JettonMasterConfig = {
-  owner: Address;
-  walletCell: Cell;
-  metadata: { [s in JettonMetaDataKeys]?: string };
-};
+import { buildTokenMetadataCell, JettonOp, transformContentCell, JettonMasterConfig } from './utils-jetton';
 
 export function jettonMasterConfigToCell(config: JettonMasterConfig): Cell {
   return beginCell()
@@ -50,23 +44,38 @@ export class JettonMaster implements Contract {
     });
   }
 
+  static mintQuery(to: Address, jettonAmount: bigint, forwardTonAmount: bigint, totalTonAmount: bigint) {
+    return beginCell()
+      .storeUint(JettonOp.Mint, 32)
+      .storeUint(0, 64)
+      .storeAddress(to)
+      .storeCoins(jettonAmount)
+      .storeCoins(forwardTonAmount)
+      .storeCoins(totalTonAmount)
+      .endCell();
+  }
+
   async sendMint(
     provider: ContractProvider,
     via: Sender,
     opt: { to: Address; jettonAmount: bigint; forwardTonAmount: bigint; totalTonAmount: bigint },
   ) {
     await provider.internal(via, {
-      value: opt.totalTonAmount + toNano(0.02),
+      value: opt.totalTonAmount + toNano(0.03),
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell()
-        .storeUint(JettonOp.Mint, 32)
-        .storeUint(0, 64)
-        .storeAddress(opt.to)
-        .storeCoins(opt.jettonAmount)
-        .storeCoins(opt.forwardTonAmount)
-        .storeCoins(opt.totalTonAmount)
-        .endCell(),
+      body: JettonMaster.mintQuery(opt.to, opt.jettonAmount, opt.forwardTonAmount, opt.totalTonAmount),
     });
+  }
+
+  static burnQuery(to: Address, jettonAmount: bigint, forwardTonAmount: bigint, totalTonAmount: bigint) {
+    return beginCell()
+      .storeUint(JettonOp.BurnJettons, 32)
+      .storeUint(0, 64)
+      .storeAddress(to)
+      .storeCoins(jettonAmount)
+      .storeCoins(forwardTonAmount)
+      .storeCoins(totalTonAmount)
+      .endCell();
   }
 
   async sendBurnJettons(
@@ -75,22 +84,15 @@ export class JettonMaster implements Contract {
     opt: { to: Address; jettonAmount: bigint; forwardTonAmount: bigint; totalTonAmount: bigint },
   ) {
     await provider.internal(via, {
-      value: toNano(0.02),
+      value: toNano(0.03),
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell()
-        .storeUint(JettonOp.BurnJettons, 32)
-        .storeUint(0, 64)
-        .storeAddress(opt.to)
-        .storeCoins(opt.jettonAmount)
-        .storeCoins(opt.forwardTonAmount)
-        .storeCoins(opt.totalTonAmount)
-        .endCell(),
+      body: JettonMaster.burnQuery(opt.to, opt.jettonAmount, opt.forwardTonAmount, opt.totalTonAmount),
     });
   }
 
   async sendChangeAdmin(provider: ContractProvider, via: Sender, newOwner: Address) {
     await provider.internal(via, {
-      value: toNano(0.02),
+      value: toNano(0.03),
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell().storeUint(JettonOp.ChangeAdmin, 32).storeUint(0, 64).storeAddress(newOwner).endCell(),
     });
@@ -98,7 +100,7 @@ export class JettonMaster implements Contract {
 
   async sendChangeMetadata(provider: ContractProvider, via: Sender, metadata: Cell) {
     await provider.internal(via, {
-      value: toNano(0.02),
+      value: toNano(0.03),
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell().storeUint(JettonOp.ChangeMetadata, 32).storeUint(0, 64).storeRef(metadata).endCell(),
     });

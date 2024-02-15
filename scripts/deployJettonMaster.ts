@@ -5,17 +5,16 @@ import { compile, NetworkProvider } from '@ton/blueprint';
 export async function run(provider: NetworkProvider, args: string[]) {
   const ui = provider.ui();
 
-  const address = Address.parse(args.length > 0 ? args[0] : await ui.input('Contract address'));
-  const owner = Address.parse(args.length > 0 ? args[1] : await ui.input('Owner address'));
+  const address = args.length > 0 ? args[0] : await ui.input('Contract address (optional)');
 
   const config = {
-    owner: owner || Address.parse('0QDyZBOXXjILiUTvx-5apgovq97k7aMrilhxvasBOlYCSEIQ'),
+    owner: provider.sender().address || Address.parse('0QDyZBOXXjILiUTvx-5apgovq97k7aMrilhxvasBOlYCSEIQ'),
     metadata: {
-      name: '\x00Demo B2D',
-      description: '\x00Demo B2D',
-      image: '\x00https://github.com/b2data/mvp-dapp/blob/main/icon192.png?raw=true',
-      decimals: '\x002',
-      symbol: '\x00RUB',
+      name: 'Demo B2D',
+      description: 'Demo B2D',
+      image: 'https://github.com/b2data/mvp-dapp/blob/main/icon192.png?raw=true',
+      decimals: '2',
+      symbol: 'RUB',
     },
     walletCell: await compile('JettonWallet'),
   };
@@ -24,7 +23,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
   if (address) {
     const jettonMaster = provider.open(
-      JettonMaster.createFromAddress(address, { code, data: jettonMasterConfigToCell(config) }),
+      JettonMaster.createFromAddress(Address.parse(address), { code, data: jettonMasterConfigToCell(config) }),
     );
     await jettonMaster.sendDeploy(provider.sender());
   } else {

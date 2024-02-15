@@ -20,7 +20,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     to: receiver,
     jettonAmount: toNano(jettons),
     forwardTonAmount: toNano(0.001),
-    totalTonAmount: toNano(0),
+    totalTonAmount: toNano(0.1),
   });
 
   ui.clearActionPrompt();

@@ -7,7 +7,7 @@ import { JettonWallet } from '../wrappers/JettonWallet';
 import { JettonMaster } from '../wrappers/JettonMaster';
 import { buildTokenMetadataCell, JettonError, JettonOp, randomAddress } from '../wrappers/utils-jetton';
 
-const metadata = { name: '\x00Demo Token', symbol: 'DEMO', decimals: '3' };
+const metadata = { name: 'Demo Token', symbol: 'DEMO', decimals: '3' };
 
 describe('JettonMaster', () => {
   let walletCode: Cell;
