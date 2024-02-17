@@ -1,11 +1,10 @@
 {
   "name": "@b2data/contracts",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "author": "Nikolai Turov",
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "files": [
-    "index.js",
     "dist"
   ],
   "scripts": {
