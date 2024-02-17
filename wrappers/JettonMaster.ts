@@ -84,7 +84,7 @@ export class JettonMaster implements Contract {
     opt: { to: Address; jettonAmount: bigint; forwardTonAmount: bigint; totalTonAmount: bigint },
   ) {
     await provider.internal(via, {
-      value: toNano(0.03),
+      value: opt.totalTonAmount + toNano(0.03),
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: JettonMaster.burnQuery(opt.to, opt.jettonAmount, opt.forwardTonAmount, opt.totalTonAmount),
     });
