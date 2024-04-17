@@ -23,7 +23,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     account,
   });
 
-  ui.write('Waiting for the orgnization removal...');
+  ui.write('Waiting for the organization removal...');
 
   let organizationsAfter = await organizations.getTotal();
   let attempt = 1;

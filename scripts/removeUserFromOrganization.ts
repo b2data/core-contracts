@@ -25,7 +25,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     wallet,
   });
 
-  ui.write('Waiting for removing the user from the orgnization...');
+  ui.write('Waiting for removing the user from the organization...');
 
   let organizationsAfter = await users.getOrganizations(wallet);
   let attempt = 1;

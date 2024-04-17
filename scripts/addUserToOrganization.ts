@@ -25,7 +25,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     wallet,
   });
 
-  ui.write('Waiting for adding the user to the orgnization...');
+  ui.write('Waiting for adding the user to the organization...');
 
   let organizationsAfter = await users.getOrganizations(wallet);
   let attempt = 1;
