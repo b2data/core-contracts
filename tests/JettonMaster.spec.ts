@@ -5,7 +5,7 @@ import { compile } from '@ton/blueprint';
 
 import { JettonWallet } from '../wrappers/JettonWallet';
 import { JettonMaster } from '../wrappers/JettonMaster';
-import { buildTokenMetadataCell, JettonError, JettonOp, randomAddress } from '../wrappers/utils-jetton';
+import { buildTokenMetadataCell, JettonError, JettonOp, randomAddress } from '../wrappers/utils/jetton';
 
 const metadata = { name: 'Demo Token', description: '', image: '', decimals: '3', symbol: 'DEMO' };
 

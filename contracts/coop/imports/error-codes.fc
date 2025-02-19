@@ -1,0 +1,10 @@
+const int error::unauthorized_admin_request = 403;
+
+const int error::not_found_supervisor = 4041;
+const int error::not_found_user = 4042;
+
+const int error::invalid_timestamp_enter = 4001;
+const int error::invalid_timestamp_leave = 4002;
+const int error::invalid_timestamp_order = 4003;
+
+const int error::unknown_action = 0xffff;

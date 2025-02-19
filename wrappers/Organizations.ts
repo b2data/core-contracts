@@ -3,10 +3,10 @@ import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, 
 export type OrganizationsConfig = {};
 
 const Opcodes = {
-  create: 0x15cf00af,
-  remove: 0xf299fd64,
-  change: 0xda4e1e74,
-  rename: 0x4384b41a,
+  create: 0x8fd6e0fb,
+  remove: 0x68801d30,
+  change: 0x4057fe20,
+  rename: 0xd99d544e,
 };
 
 export function organizationsConfigToCell(config: OrganizationsConfig): Cell {
@@ -100,7 +100,7 @@ export class Organizations implements Contract {
     return result.stack.readAddressOpt();
   }
 
-  async getOwnerByAdrress(provider: ContractProvider, address: Address) {
+  async getOwnerByAddress(provider: ContractProvider, address: Address) {
     const result = await provider.get('get_contract_owner', [
       { type: 'cell', cell: beginCell().storeAddress(address).endCell() },
     ]);
@@ -112,7 +112,7 @@ export class Organizations implements Contract {
     return result.stack.readBufferOpt()?.toString() || null;
   }
 
-  async getSiteByAdrress(provider: ContractProvider, address: Address) {
+  async getSiteByAddress(provider: ContractProvider, address: Address) {
     const result = await provider.get('get_contract_site', [
       { type: 'cell', cell: beginCell().storeAddress(address).endCell() },
     ]);

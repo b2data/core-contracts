@@ -9,5 +9,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["wrappers/*", "index.ts"]
+  "include": ["wrappers/*", "index.ts", "wrappers/utils/jetton.ts"]
 }

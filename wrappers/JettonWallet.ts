@@ -1,5 +1,5 @@
 import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from '@ton/core';
-import { JettonOp } from './utils-jetton';
+import { JettonOp } from './utils/jetton';
 
 export type JettonWalletConfig = {};
 

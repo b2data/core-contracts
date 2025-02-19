@@ -11,8 +11,8 @@ const int op::withdraw_tons = 0x6d8e5e3c;
 const int op::burn_jettons = 0x25938561;
 
 const int op::mint = 0x1674b0a0;
-const int op::change_admin = 0x4840664f;
-const int op::change_content = 0x5773d1f5;
+const int op::change_admin = 0xd4deb03b;
+const int op::change_content = 0x0ec29200;
 
 (slice, (int)) ~load_op(slice s) inline { return s.load_uint(32); }
 (slice, (int)) ~load_query_id(slice s) inline { return s.load_uint(64); }

@@ -452,10 +452,10 @@ describe('Organizations', () => {
     const total = await organizations.getTotal();
     expect(1).toEqual(total);
 
-    const ownerByAddress = await organizations.getOwnerByAdrress(account);
+    const ownerByAddress = await organizations.getOwnerByAddress(account);
     expect(client.getSender().address.toString()).toEqual(ownerByAddress?.toString());
 
-    const siteByAddress = await organizations.getSiteByAdrress(account);
+    const siteByAddress = await organizations.getSiteByAddress(account);
     expect(site).toEqual(siteByAddress);
   });
 });

@@ -1,0 +1,11 @@
+
+const int op::change_admin = 0xd4deb03b;
+
+const int op::add_supervisor = 0x602a234b;
+const int op::remove_supervisor = 0xb1bb9885;
+
+const int op::set_user = 0x185434c0;
+
+(slice, (int)) ~load_op(slice s) inline { 
+  return s.load_uint(32);
+}

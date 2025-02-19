@@ -7,7 +7,126 @@
 | Users           | testnet   | `EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV` | [link](https://testnet.tonscan.org/address/EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV) |
 | Users           | mainnet   | `-` | [link](https://tonscan.org/address/) |
 
-All methods of the contracts are exported to `npm` and can be used as `import { Organizations, Users } from '@b2data/contracts'`
+All methods of the contracts are exported to `npm` and can be used as `import { * } from '@b2data/contracts'`
+
+## Jetton Contract
+
+The smart-contract is the original [jetton-minter](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc) and [jetton-wallet](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc) smart-contracts in the TON with next changes:
+- sending jettons allows to Jetton Admin Wallet
+- receiving jettons allows from Jetton Admin Wallet
+
+## Coop Users Contracts
+
+The smart-contract stores data of coop users, number of active users and supervisors who has access to decode user data
+```
+admin_address:MsgAddress
+active_wallets:Int
+total_wallets:Int
+access:^Dict [slice]
+users:^Dict [int(32), int(32), cell]
+```
+
+### Methods
+| Parameter       | Type    | Description                                                                             |
+| --------------- | ------- | --------------------------------------------------------------------------------------- |
+| sender          | Sender  | Represents the connected wallet and allows to send transactions                         |
+| newAdmin        | Address | TON Address of new admin who can make requests                                          |
+| wallet          | Address | TON Address of supervisor or user based on request                                      |
+| timestampEnter  | int     | Timestamp when user created. Cannot be changed                                          |
+| timestampLeave  | int     | Timestamp when user leave. If user active it is equal 0                                 |
+| data            | string  | Encoded user data                                                                       |
+
+
+- Change contract admin address
+  ```
+  sendChangeAdmin(
+    sender: Sender,
+    newAdmin: Address
+  ) => Promise<void>
+  ```
+
+- Add supervisor wallet
+  ```
+  sendAddSupervisor(
+    sender: Sender,
+    wallet: Address
+  ) => Promise<void>
+  ```
+
+- Remove supervisor wallet
+  ```
+  sendRemoveSupervisor(
+    sender: Sender,
+    wallet: Address
+  ) => Promise<void>
+  ```
+
+- Set user data supervisor wallet
+  ```
+  sendSetUser(
+    sender: Sender,
+    options: {
+      wallet: Address;
+      timestampEnter: number;
+      timestampLeave: number;
+      data: string;
+    },
+  ) => Promise<void>
+  ```
+
+- Get full data of smart-contract
+  ```
+  getFullData() => Promise<{
+    adminAddress: string;
+    activeWallets: number;
+    totalWallets: number;
+    supervisors: string[];
+    users: { wallet:string; timestampEnter:number; timestampLeave:number; data:string; }[]
+  }>
+  ```
+
+- Check if wallet has supervisor access
+  ```
+  getSupervisorAccess(wallet: Address) => Promise<boolean>
+  ```
+
+- Check if user has access (timestampLeave = 0)
+  ```
+  getUserAccess(wallet: Address) => Promise<boolean>
+  ```
+
+- Get user information
+  ```
+  getUserInfo(wallet: Address) => Promise<{ 
+    wallet: string;
+    timestampEnter: number;
+    timestampLeave: number;
+    data: string;
+  }>
+  ```
+
+- Get amount of active wallets
+  ```
+  getActiveWalletsCount() => Promise<number>
+  ```
+
+- Get amount of total wallets
+  ```
+  getTotalUsersCount() => Promise<number>
+  ```
+
+### Error codes
+
+
+| Code  | Description                                             |
+| ----- | ------------------------------------------------------- |
+| 403   | The wallet is different to adminWallet                  |
+| 4001  | Timestamp enter should be positive                      |
+| 4002  | Timestamp leave should be positive                      |
+| 4002  | Timestamp enter should be before timestamp leave        |
+| 4041  | The wallet is not in supervisors list                   |
+| 4042  | The wallet is not in users list                         |
+
 
 ## Organizations Contract
 
@@ -18,7 +137,7 @@ owner_dict      { account_id: ton_address   }
 site_dict       { account_id: string        }
 ```
 
-#### Methods
+### Methods
 
 | Parameter   | Type    | Description                                                                             |
 | ----------- | ------- | --------------------------------------------------------------------------------------- |
@@ -78,7 +197,7 @@ site_dict       { account_id: string        }
 
 - Get the owner of the organization by TON address
   ```
-  getOwnerByAdrress(address: Address) => Promise<Address | null>
+  getOwnerByAddress(address: Address) => Promise<Address | null>
   ```
 
 - Get the site of the organization by accountId
@@ -88,11 +207,11 @@ site_dict       { account_id: string        }
 
 - Get the site of the organization by TON Address
   ```
-  getOwnerByAdrress(address: Address) => Promise<string | null>
+  getOwnerByAddress(address: Address) => Promise<string | null>
   ```
 
 
-#### Error codes
+### Error codes
 
 | Code  | Description                                             |
 | ----- | ------------------------------------------------------- |
@@ -110,7 +229,7 @@ owner_dict      { account_id: ton_address   }
 site_dict       { account_id: string        }
 ```
 
-#### Methods
+### Methods
 
 | Parameter   | Type    | Description                                                     |
 | ----------- | ------- | --------------------------------------------------------------- |
@@ -140,7 +259,7 @@ site_dict       { account_id: string        }
   getOrganizations(wallet: Address) => Promise<Address[]>
   ```
 
-#### Error codes
+### Error codes
 
 | Code  | Description                                     |
 | ----- | ------------------------------------------------|

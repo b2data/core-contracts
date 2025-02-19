@@ -9,5 +9,5 @@ export async function run(provider: NetworkProvider) {
 
   await provider.waitForDeploy(organizations.address);
 
-  console.log('Done');
+  console.log('Organizations deployed at: ', organizations.address.toString());
 }

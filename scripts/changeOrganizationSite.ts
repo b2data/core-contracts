@@ -16,7 +16,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
   const organizations = provider.open(Organizations.createFromAddress(address));
 
-  const siteBefore = await organizations.getSiteByAdrress(account);
+  const siteBefore = await organizations.getSiteByAddress(account);
   ui.write(`Site Before: ${siteBefore}`);
 
   if (siteBefore !== newSite) {
@@ -32,12 +32,12 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
   ui.write('Waiting for changing the orgnization site...');
 
-  let siteAfter = await organizations.getSiteByAdrress(account);
+  let siteAfter = await organizations.getSiteByAddress(account);
   let attempt = 1;
   while (siteAfter === siteBefore) {
     ui.setActionPrompt(`Attempt ${attempt}`);
     await sleep(2000);
-    siteAfter = await organizations.getSiteByAdrress(account);
+    siteAfter = await organizations.getSiteByAddress(account);
     attempt++;
   }
 

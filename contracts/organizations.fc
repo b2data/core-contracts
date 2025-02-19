@@ -1,10 +1,10 @@
 #include "imports/stdlib.fc";
 #include "imports/utils.fc";
 
-const op::create = "op::create"c;   ;; 0x15cf00af
-const op::remove = "op::remove"c;   ;; 0xf299fd64
-const op::change = "op::change"c;   ;; 0xda4e1e74
-const op::rename = "op::rename"c;   ;; 0x4384b41a
+const op::create = "create"c;   ;; 0x8fd6e0fb
+const op::remove = "remove"c;   ;; 0x68801d30
+const op::change = "change"c;   ;; 0x4057fe20
+const op::rename = "rename"c;   ;; 0xd99d544e
 
 
 ;; contract_dict = { accountId, contract_address }

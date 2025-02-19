@@ -16,7 +16,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
   const organizations = provider.open(Organizations.createFromAddress(address));
 
-  const ownerBefore = await organizations.getOwnerByAdrress(account);
+  const ownerBefore = await organizations.getOwnerByAddress(account);
   ui.write(`Owner Before: ${ownerBefore?.toString()}`);
 
   await organizations.sendChangeOwner(provider.sender(), {
@@ -27,12 +27,12 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
   ui.write('Waiting for changing the orgnization owner...');
 
-  let ownerAfter = await organizations.getOwnerByAdrress(account);
+  let ownerAfter = await organizations.getOwnerByAddress(account);
   let attempt = 1;
   while (ownerAfter?.toString() === ownerBefore?.toString()) {
     ui.setActionPrompt(`Attempt ${attempt}`);
     await sleep(2000);
-    ownerAfter = await organizations.getOwnerByAdrress(account);
+    ownerAfter = await organizations.getOwnerByAddress(account);
     attempt++;
   }
 

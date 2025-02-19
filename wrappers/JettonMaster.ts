@@ -9,7 +9,7 @@ import {
   SendMode,
   toNano,
 } from '@ton/core';
-import { buildTokenMetadataCell, JettonOp, transformContentCell, JettonMasterConfig } from './utils-jetton';
+import { buildTokenMetadataCell, JettonOp, transformContentCell, JettonMasterConfig } from './utils/jetton';
 
 export function jettonMasterConfigToCell(config: JettonMasterConfig): Cell {
   return beginCell()

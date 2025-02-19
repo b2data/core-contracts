@@ -18,8 +18,8 @@ export enum JettonOp {
   BurnJettons = 0x25938561,
 
   Mint = 0x1674b0a0,
-  ChangeAdmin = 0x4840664f,
-  ChangeMetadata = 0x5773d1f5,
+  ChangeAdmin = 0xd4deb03b,
+  ChangeMetadata = 0x0ec29200,
 }
 
 export enum JettonError {

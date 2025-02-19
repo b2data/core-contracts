@@ -5,7 +5,7 @@ import { compile } from '@ton/blueprint';
 
 import { JettonWallet } from '../wrappers/JettonWallet';
 import { JettonMaster } from '../wrappers/JettonMaster';
-import { JettonError, JettonOp } from '../wrappers/utils-jetton';
+import { JettonError, JettonOp } from '../wrappers/utils/jetton';
 
 const metadata = { name: 'Demo Token', symbol: 'DEMO', decimals: '3' };
 

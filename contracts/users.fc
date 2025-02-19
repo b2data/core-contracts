@@ -1,8 +1,8 @@
 #include "imports/stdlib.fc";
 #include "imports/utils.fc";
 
-const op::invite = "op::invite"c;   ;; 0x5dfbf083
-const op::exclude = "op::exclude"c; ;; 0x0e1e6b74
+const op::invite = "invite"c;   ;; 0xc7e210d7
+const op::exclude = "exclude"c; ;; 0x6282e779
 
 ;; user_dict    { walletHash: address->address->address->... }
 (cell) load_data() impure {

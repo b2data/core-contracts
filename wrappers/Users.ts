@@ -3,8 +3,8 @@ import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, 
 export type UsersConfig = {};
 
 const Opcodes = {
-  invite: 0x5dfbf083,
-  exclude: 0x0e1e6b74,
+  invite: 0xc7e210d7,
+  exclude: 0x6282e779,
 };
 
 export function usersConfigToCell(config: UsersConfig): Cell {
@@ -12,7 +12,10 @@ export function usersConfigToCell(config: UsersConfig): Cell {
 }
 
 export class Users implements Contract {
-  constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
+  constructor(
+    readonly address: Address,
+    readonly init?: { code: Cell; data: Cell },
+  ) {}
 
   static createFromAddress(address: Address) {
     return new Users(address);
@@ -35,7 +38,7 @@ export class Users implements Contract {
   async sendAddToOrganization(
     provider: ContractProvider,
     via: Sender,
-    opts: { gas: bigint; wallet: Address; account: Address }
+    opts: { gas: bigint; wallet: Address; account: Address },
   ) {
     await provider.internal(via, {
       value: opts.gas,
@@ -51,7 +54,7 @@ export class Users implements Contract {
   async sendRemoveFromOrganization(
     provider: ContractProvider,
     via: Sender,
-    opts: { gas: bigint; wallet: Address; account: Address }
+    opts: { gas: bigint; wallet: Address; account: Address },
   ) {
     await provider.internal(via, {
       value: opts.gas,
@@ -69,7 +72,7 @@ export class Users implements Contract {
       { type: 'slice', cell: beginCell().storeAddress(wallet).endCell() },
     ]);
     const tuple = await result.stack.readTuple();
-    const list = [];
+    const list: Address[] = [];
     while (true) {
       try {
         const address = await tuple.readAddress();
