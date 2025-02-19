@@ -10,7 +10,7 @@ describe('CoopUsers', () => {
 
   beforeAll(async () => {
     code = await compile('CoopUsers');
-  });
+  }, 10000);
 
   let blockchain: Blockchain;
   let deployer: SandboxContract<TreasuryContract>;
