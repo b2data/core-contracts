@@ -50,7 +50,7 @@ export class CoopUsers implements Contract {
 
   async sendDeploy(provider: ContractProvider, via: Sender) {
     await provider.internal(via, {
-      value: toNano(0.02),
+      value: toNano(0.03),
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell().endCell(),
     });

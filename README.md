@@ -1,11 +1,15 @@
 # Contracts
 
-| Smart contract  | Network  | Address                                            | TonScan                                                                                      |
-| --------------- | --------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Organizations   | testnet   | `EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t` | [link](https://testnet.tonscan.org/address/EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t) |
-| Organizations   | mainnet   | `-` | [link](https://tonscan.org/address/) |
-| Users           | testnet   | `EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV` | [link](https://testnet.tonscan.org/address/EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV) |
-| Users           | mainnet   | `-` | [link](https://tonscan.org/address/) |
+| Smart contract      | Network  | Address                                             | Links                                         |
+| ------------------- | --------- | -------------------------------------------------- | --------------------------------------------- |
+| Jetton Master       | testnet   | `kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F` | [TonScan](https://testnet.tonscan.org/jetton/kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F) [TonViewer](https://testnet.tonviewer.com/kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F) |
+| Jetton Master       | mainnet   | `-` | `-` |
+| Coop Users          | testnet   | `kQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqo56L` | [TonScan](https://testnet.tonscan.org/address/kQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqo56L) [TonViewer](https://testnet.tonviewer.com/kQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqo56L) |
+| Coop Users          | mainnet   | `-` | `-` |
+| ~~Organizations~~   | testnet   | `EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t` | [TonScan](https://testnet.tonscan.org/address/EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t) [TonViewer](https://testnet.tonviewer.com/kQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD9Un) |
+| ~~Organizations~~   | mainnet   | `-` | `-` |
+| ~~Users~~           | testnet   | `EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV` | [TonScan](https://testnet.tonscan.org/address/EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV) [TonViewer](https://testnet.tonviewer.com/EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV) |
+| ~~Users~~           | mainnet   | `-` | `-` |
 
 All methods of the contracts are exported to `npm` and can be used as `import { * } from '@b2data/contracts'`
 
