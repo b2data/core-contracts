@@ -5,7 +5,7 @@ import { beginCell, Dictionary, Cell } from '@ton/core';
 import { Sha256 } from '@aws-crypto/sha256-js';
 
 export enum JettonOp {
-  Transfer = 0xf8a7ea5,
+  Transfer = 0x0f8a7ea5,
   TransferNotification = 0x7362d09c,
 
   InternalTransfer = 0x178d4519,
