@@ -20,6 +20,7 @@ const int ADDRESS_KEY_SIZE = 267;
         ds~load_dict()      ;; users
     );
 }
+
 () save_data(slice admin_address, int active_wallets, int total_wallets, cell supervisors_dict, cell users_dict) impure {
     set_data(
         begin_cell()

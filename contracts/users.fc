@@ -73,10 +73,10 @@ cell convert_storage (tuple list, cell result) impure {
 
   throw_if(4000, equal_slices(wallet, address));
 
-  (cell srorage, int success) = user_dict.udict_get_ref?(256, walletHash);
+  (cell storage, int success) = user_dict.udict_get_ref?(256, walletHash);
 
   if (op == op::invite) {
-    (tuple organizations, int duplicate) = load_organization(srorage, address);
+    (tuple organizations, int duplicate) = load_organization(storage, address);
     throw_if(4001, duplicate == 0);
 
     organizations~tpush(address);
@@ -91,7 +91,7 @@ cell convert_storage (tuple list, cell result) impure {
   if (op == op::exclude) {
     throw_if(404, success == 0);
 
-    (tuple organizations, int duplicate) = load_organization(srorage, address);
+    (tuple organizations, int duplicate) = load_organization(storage, address);
     throw_if(4002, duplicate == -1);
 
     tuple newOrganizations = empty_tuple();
