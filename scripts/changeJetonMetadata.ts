@@ -1,7 +1,7 @@
 import { Address } from '@ton/core';
 import { NetworkProvider } from '@ton/blueprint';
 import { JettonMaster } from '../wrappers/JettonMaster';
-import { buildTokenMetadataCell } from '../wrappers/utils-jetton';
+import { buildTokenMetadataCell } from '../wrappers/utils/jetton'
 
 export async function run(provider: NetworkProvider, args: string[]) {
   const ui = provider.ui();

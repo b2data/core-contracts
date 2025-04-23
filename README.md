@@ -2,10 +2,11 @@
 
 | Smart contract      | Network  | Address                                             | Links                                         |
 | ------------------- | --------- | -------------------------------------------------- | --------------------------------------------- |
-| Jetton Master       | testnet   | `kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F` | [TonScan](https://testnet.tonscan.org/jetton/kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F) [TonViewer](https://testnet.tonviewer.com/kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F) |
-| Jetton Master       | mainnet   | `-` | `-` |
+| Jetton Master Test  | testnet   | `kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F` | [TonScan](https://testnet.tonscan.org/jetton/kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F) [TonViewer](https://testnet.tonviewer.com/kQBU53L3YMSATQh7TCg2HKLnDJNHkiXstTGNZEs_rLnajc0F) |
+| Jetton Master Beta  | testnet   | `kQAlgxURfZkthqwSVyqCGOY_ztNszSVV2sLuVZKgz_hBi3Dx` | [TonScan](https://testnet.tonscan.org/jetton/kQAlgxURfZkthqwSVyqCGOY_ztNszSVV2sLuVZKgz_hBi3Dx) [TonViewer](https://testnet.tonviewer.com/kQAlgxURfZkthqwSVyqCGOY_ztNszSVV2sLuVZKgz_hBi3Dx) |
+| Jetton Master       | mainnet   | `EQCGuU6q6y42e7tXF4CfmO61_8Z-yZUZstIVNqNuuVQo5p_d` | [TonScan](https://tonscan.org/jetton/EQCGuU6q6y42e7tXF4CfmO61_8Z-yZUZstIVNqNuuVQo5p_d) [TonViewer](https://tonviewer.com/EQCGuU6q6y42e7tXF4CfmO61_8Z-yZUZstIVNqNuuVQo5p_d) |
 | Coop Users          | testnet   | `kQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqo56L` | [TonScan](https://testnet.tonscan.org/address/kQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqo56L) [TonViewer](https://testnet.tonviewer.com/kQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqo56L) |
-| Coop Users          | mainnet   | `-` | `-` |
+| Coop Users          | mainnet   | `EQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqoyUB` | [TonScan](https://tonscan.org/address/EQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqoyUB) [TonViewer](https://tonviewer.com/EQAP9Zh-f3OiIe3J7my-PfLixehBXVWipwKMWwMBfVzqoyUB) |
 | ~~Organizations~~   | testnet   | `EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t` | [TonScan](https://testnet.tonscan.org/address/EQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD26t) [TonViewer](https://testnet.tonviewer.com/kQAjgRWlRXBXQiluvbI8Fo0yqgwnIptbinKJM1S1WracD9Un) |
 | ~~Organizations~~   | mainnet   | `-` | `-` |
 | ~~Users~~           | testnet   | `EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV` | [TonScan](https://testnet.tonscan.org/address/EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV) [TonViewer](https://testnet.tonviewer.com/EQAdrRC0nbILTblhbyDAYSqZWaK1fVphCBg233byIO63fEAV) |
@@ -19,7 +20,7 @@ The smart-contract is the original [jetton-minter](https://github.com/ton-blockc
 - sending jettons allows to Jetton Admin Wallet
 - receiving jettons allows from Jetton Admin Wallet
 
-## Coop Users Contracts
+## Coop Users Contract
 
 The smart-contract stores data of coop users, number of active users and supervisors who has access to decode user data
 ```
@@ -130,6 +131,131 @@ users:^Dict [int(32), int(32), cell]
 | 4002  | Timestamp enter should be before timestamp leave        |
 | 4041  | The wallet is not in supervisors list                   |
 | 4042  | The wallet is not in users list                         |
+
+
+## Document Signature Contract
+
+The smart-contract stores data of documents and signatures, total number of documents, number of documents by author
+```
+documents:^Dict [Address, String(512), int(4), cell, Dict]
+total_wallets: Int
+authors:^Dict [Int(32)]
+```
+<!-- 
+documents: { \[ key ]: { hash: String(512), author:Address, step: Int(4) wallets: Cell (Address\[]), signatures: { \[wallet:Address]: { timestamp: Int(32); signature: String(128) } } } }
+	- key: String(12) - номер документа в формате YYYYMMDDZZZZ (Z - порядковый номер за день)
+	- hash: String(256) - хэш сумма файла документа
+	- author: Address - кто запросил подписание
+	- step: Int(4) - текущий подписант
+	- wallets: Cell информация о порядке подписания. все кошельки в одной ячейке - одинаковый порядок подписания, ссылка на следующую ячейку - следующий порядок. 
+	  пример: Cell (address1, address2, refs: Cell (address3) ) => step0: address1, address2; step1: address3
+  - total_signatures: Int(32)
+	- signatures: Dict с информацией о подписях, где ключ - кошелек подписанта, значение - подпись и таймстамп
+- total: Int(32) - количество всего документов
+- authors: { \[Address]: Int(32) } -->
+	
+
+### Methods
+| Parameter       | Type    | Description                                                                             |
+| --------------- | ------- | --------------------------------------------------------------------------------------- |
+| sender          | Sender  | Represents the connected wallet and allows to send transactions                         |
+| newAdmin        | Address | TON Address of new admin who can make requests                                          |
+| wallet          | Address | TON Address of supervisor or user based on request                                      |
+| timestampEnter  | int     | Timestamp when user created. Cannot be changed                                          |
+| timestampLeave  | int     | Timestamp when user leave. If user active it is equal 0                                 |
+| data            | string  | Encoded user data                                                                       |
+
+
+- Change contract admin address
+  ```
+  sendChangeAdmin(
+    sender: Sender,
+    newAdmin: Address
+  ) => Promise<void>
+  ```
+
+- Add supervisor wallet
+  ```
+  sendAddSupervisor(
+    sender: Sender,
+    wallet: Address
+  ) => Promise<void>
+  ```
+
+- Remove supervisor wallet
+  ```
+  sendRemoveSupervisor(
+    sender: Sender,
+    wallet: Address
+  ) => Promise<void>
+  ```
+
+- Set user data supervisor wallet
+  ```
+  sendSetUser(
+    sender: Sender,
+    options: {
+      wallet: Address;
+      timestampEnter: number;
+      timestampLeave: number;
+      data: string;
+    },
+  ) => Promise<void>
+  ```
+
+- Get full data of smart-contract
+  ```
+  getFullData() => Promise<{
+    adminAddress: string;
+    activeWallets: number;
+    totalWallets: number;
+    supervisors: string[];
+    users: { wallet:string; timestampEnter:number; timestampLeave:number; data:string; }[]
+  }>
+  ```
+
+- Check if wallet has supervisor access
+  ```
+  getSupervisorAccess(wallet: Address) => Promise<boolean>
+  ```
+
+- Check if user has access (timestampLeave = 0)
+  ```
+  getUserAccess(wallet: Address) => Promise<boolean>
+  ```
+
+- Get user information
+  ```
+  getUserInfo(wallet: Address) => Promise<{ 
+    wallet: string;
+    timestampEnter: number;
+    timestampLeave: number;
+    data: string;
+  }>
+  ```
+
+- Get amount of active wallets
+  ```
+  getActiveWalletsCount() => Promise<number>
+  ```
+
+- Get amount of total wallets
+  ```
+  getTotalUsersCount() => Promise<number>
+  ```
+
+### Error codes
+
+
+| Code  | Description                                             |
+| ----- | ------------------------------------------------------- |
+| 403   | The wallet is different to adminWallet                  |
+| 4001  | Timestamp enter should be positive                      |
+| 4002  | Timestamp leave should be positive                      |
+| 4002  | Timestamp enter should be before timestamp leave        |
+| 4041  | The wallet is not in supervisors list                   |
+| 4042  | The wallet is not in users list                         |
+
 
 
 ## Organizations Contract

@@ -8,11 +8,11 @@ export async function run(provider: NetworkProvider, args: string[]) {
   const address = args.length > 0 ? args[0] : await ui.input('Contract address (optional)');
 
   const config = {
-    owner: provider.sender().address || Address.parse('0QDyZBOXXjILiUTvx-5apgovq97k7aMrilhxvasBOlYCSEIQ'),
+    owner: provider.sender().address || Address.parse('0QDEJFMf62Sv60Zgfgr_VgliggchMwi2LBI4kdgXOJ_DW8_y'),
     metadata: {
-      name: 'Demo B2D',
-      description: 'Demo B2D',
-      image: 'https://github.com/b2data/mvp-dapp/blob/main/icon192.png?raw=true',
+      name: 'Digital Cooperation',
+      description: 'Account in CCMP "Digital Cooperation"',
+      image: 'https://github.com/b2data/dapp/blob/main/icon192.png?raw=true',
       decimals: '2',
       symbol: 'RUB',
     },
@@ -29,6 +29,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
   } else {
     const jettonMaster = provider.open(JettonMaster.createFromConfig(config, code));
     await jettonMaster.sendDeploy(provider.sender());
+    ui.write(jettonMaster.address.toString());
   }
 
   ui.clearActionPrompt();

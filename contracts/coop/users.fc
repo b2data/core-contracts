@@ -1,5 +1,5 @@
-#include "imports/error-codes.fc";
-#include "imports/op-codes.fc";
+#include "imports/users/error-codes.fc";
+#include "imports/users/op-codes.fc";
 #include "imports/stdlib.fc";
 #include "imports/utils.fc";
 
