@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 24
           registry-url: https://npm.pkg.github.com/
+      - run: corepack enable
       - run: yarn install
       - run: yarn test
   build:
@@ -40,6 +41,7 @@ jobs:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
       - run: |
+          corepack enable
           yarn install
           yarn compile
           yarn pack
