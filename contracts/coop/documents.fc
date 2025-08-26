@@ -1,0 +1,176 @@
+#include "imports/documents/error-codes.fc";
+#include "imports/documents/op-codes.fc";
+#include "imports/stdlib.fc";
+#include "imports/utils.fc";
+
+const int PROVIDER_KEY_SIZE = 3;
+const int DOCUMENT_KEY_SIZE = 16;
+const int DOCUMENT_STEP_SIZE = 4;
+const int ADDRESS_KEY_SIZE = 267;
+
+;; Coop documents smart contract
+
+;; storage scheme
+;; storage#_ documents:^Dict total_documents:Int authors:^Dict = Storage;
+
+(cell, int, cell) load_data() inline {
+    slice ds = get_data().begin_parse();
+    return (
+        ds~load_dict(),     ;; documents
+        ds~load_int(32),    ;; total_documents
+        ds~load_dict()      ;; authors
+    );
+}
+
+() save_data(cell documents_dict, int total_documents, cell authors_dict) impure {
+    set_data(
+        begin_cell()
+            .store_dict(documents_dict)
+            .store_uint(total_documents, 32)            
+            .store_dict(authors_dict)
+            .end_cell()
+    );
+}
+
+
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    if (in_msg_body.slice_empty?()) {
+        return ();
+    }
+
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+
+    if (flags & 1) { ;; ignore all bounced messages
+        return ();
+    }
+
+    slice sender_address = cs~load_msg_addr();
+    int op = in_msg_body~load_op();
+
+    if (op == op::add_document) {
+        (cell documents_dict, int total_documents, cell authors_dict) = load_data();
+
+        slice document_key = in_msg_body~load_bits(DOCUMENT_KEY_SIZE * 8);
+        slice provider = document_key.preload_bits(3 * 8).skip_bits(16 * 8 - 3 * 8);
+
+        (slice document, int document_status) = documents_dict.dict_get?(DOCUMENT_KEY_SIZE, document_key);
+        throw_unless(error::document_exists, document_status == 0);
+
+        slice document_hash = in_msg_body~load_bits(256 * 8);
+        cell document_steps = in_msg_body~load_ref();
+        cell document_wallets = in_msg_body~load_ref();
+        int signatures_count = in_msg_body~load_uint(4);
+        cell document_signatures = in_msg_body~load_maybe_ref();
+
+        if (document_signatures.is_null()) {
+            document_signatures = new_dict();
+        }
+
+        documents_dict~dict_set_ref(DOCUMENT_KEY_SIZE, document_key, begin_cell()
+            .store_slice(sender_address)      ;; author
+            .store_slice(document_hash)       ;; hash
+            .store_dict(document_steps)       ;; steps
+            .store_dict(document_wallets)     ;; wallets
+            .store_uint(signatures_count, 4)  ;; total_signatures
+            .store_dict(document_signatures)  ;; signatures
+            .end_cell());
+
+        total_documents = total_documents + 1;
+
+        (cell provider_dict, int author_status) = authors_dict.dict_get_ref?(ADDRESS_KEY_SIZE, sender_address);
+
+        if (author_status != 0) {
+            cell provider_dict = new_dict();
+
+            provider_dict~dict_set_ref(PROVIDER_KEY_SIZE, provider, begin_cell()
+                .store_uint(1, 32)
+                .end_cell());
+
+            authors_dict~dict_set_ref(ADDRESS_KEY_SIZE, sender_address, begin_cell()
+                .store_dict(provider_dict)
+                .end_cell());
+        } else {
+            ;;(cell total_ref, int total_status) = provider_dict.dict_get_ref?(PROVIDER_KEY_SIZE, provider);
+            ;;int total = total_ref.load_int(32);
+
+            ;;int total_count = total_status == 0 ? 0 : total;
+            int total_count = 0;
+            total_count = total_count + 1;
+
+            provider_dict~dict_set_ref(PROVIDER_KEY_SIZE, provider, begin_cell()
+                .store_uint(total_count, 32)
+                .end_cell());
+
+            authors_dict~dict_set_ref(ADDRESS_KEY_SIZE, sender_address, begin_cell()
+                .store_dict(provider_dict)
+                .end_cell());
+        }
+        
+        save_data(documents_dict, total_documents, authors_dict);
+        return ();
+    }
+
+    if (op == op::add_signature) {
+        (cell documents_dict, int total_documents, cell authors_dict) = load_data();
+        slice document_key = in_msg_body~load_bits(DOCUMENT_KEY_SIZE * 8);
+        slice public_key = in_msg_body~load_bits(256 * 8);
+        int public_key_int = public_key.preload_uint(256);
+        slice signature = in_msg_body~load_bits(256 * 8);
+        int timestamp = in_msg_body~load_int(32);
+
+        (slice document, int document_status) = documents_dict.dict_get?(DOCUMENT_KEY_SIZE, document_key);
+        throw_unless(error::not_found_document, document_status == 0);
+
+        slice document_author = document~load_bits(256 * 8);
+        slice document_hash = document~load_bits(256 * 8);
+        cell steps_dict = document~load_dict();
+        cell wallets_dict = document~load_dict();
+        int signatures_count = document~load_uint(4);
+        cell signatures_dict = document~load_dict();
+
+        ;; check signature
+        throw_unless(error::invalid_signature, check_data_signature(document_hash, signature, public_key_int));
+
+        (slice document_step, int step_status) = steps_dict.dict_get?(DOCUMENT_STEP_SIZE, begin_cell().store_uint(signatures_count, 4).end_cell().begin_parse());
+        throw_unless(error::not_found_step, step_status == 0);
+
+        (slice document_step_rest, int step) = document_step.load_uint(DOCUMENT_STEP_SIZE);
+        (slice document_wallet, int wallet_status) = wallets_dict.dict_get?(DOCUMENT_STEP_SIZE, begin_cell().store_uint(step, 4).end_cell().begin_parse());
+        throw_unless(error::not_found_wallet, wallet_status == 0);
+
+        while (!document_wallet.is_null()) {
+            slice wallet = document_wallet~load_bits(256 * 8);
+            if (wallet == sender_address) {
+                break;
+            }
+        }
+        throw_if(error::invalid_signature_order, document_wallet.is_null());
+
+        (slice existing_signature, int signature_status) = signatures_dict.dict_get?(ADDRESS_KEY_SIZE, sender_address);
+        throw_if(error::signature_exists, signature_status == 0);
+
+        signatures_dict~dict_set_ref(ADDRESS_KEY_SIZE, sender_address, begin_cell()
+            .store_slice(public_key)
+            .store_slice(signature)
+            .store_uint(timestamp, 32)
+            .end_cell());
+
+        signatures_count = signatures_count + 1;
+
+        documents_dict~dict_set_ref(DOCUMENT_KEY_SIZE, document_key, begin_cell()
+            .store_slice(document_author)     ;; author
+            .store_slice(document_hash)       ;; hash
+            .store_dict(steps_dict)           ;; steps
+            .store_dict(wallets_dict)         ;; wallets
+            .store_uint(signatures_count, 4)  ;; total_signatures
+            .store_dict(signatures_dict)      ;; signatures
+            .end_cell());
+
+        save_data(documents_dict, total_documents, authors_dict);
+        
+        return ();
+    }
+
+    throw(error::unknown_action);
+}
