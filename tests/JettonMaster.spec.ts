@@ -1,6 +1,5 @@
 import { Blockchain, SandboxContract, TreasuryContract, internal } from '@ton/sandbox';
 import { Address, beginCell, Cell, toNano } from '@ton/core';
-import '@ton/test-utils';
 import { compile } from '@ton/blueprint';
 
 import { JettonWallet } from '../wrappers/JettonWallet';

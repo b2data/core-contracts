@@ -1,6 +1,5 @@
 import { Blockchain, SandboxContract } from '@ton/sandbox';
 import { Address, Cell, toNano } from '@ton/core';
-import '@ton/test-utils';
 import { compile } from '@ton/blueprint';
 
 import { Users } from '../wrappers/Users';

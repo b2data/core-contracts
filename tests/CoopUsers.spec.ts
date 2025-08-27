@@ -1,7 +1,6 @@
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell } from '@ton/core';
 import { CoopUsers } from '../wrappers/CoopUsers';
-import '@ton/test-utils';
 import { compile } from '@ton/blueprint';
 import { sha256 } from '@ton/crypto';
 
